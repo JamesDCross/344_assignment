@@ -1,0 +1,42 @@
+﻿2. Entities and Attributes
+
+SUPPLIER
+Bank_Account_Number: simple, single-valued, integer, Key Attribute
+Company_Name: simple, single-valued, string
+Contact_Info: simple, single-valued, string
+
+BOOK
+Title: simple, single-valued, string
+ISBN: simple, single-valued, integer, Key Attribute
+Author: composite (FName, Middle_INIT, LName), single-valued, string
+Price: simple, single-valued, real
+Amount_In_Stock: simple, single-valued, integer
+
+ORDER
+Date: simple, single-valued, date
+Time: simple, single-valued, time
+Transaction_Number: simple, single-valued, integer, Key Attribute
+
+EMPLOYEE
+Name: composite (FName, Middle_INIT, LName), single-valued, string
+IRD_Number: simple, single-valued, integer, Key Attribute
+Contact_Number: simple, single-valued, integer
+Weekly_Hours: simple, single-valued, real
+Hourly_Rate: simple, single-valued, real
+Wage: derived, single-valued, real
+
+CUSTOMER
+Delivery_Address:  composite(Street_Number, Street_Name, Suburb, City, Postcode), single-valued, string
+Customer_ID: simple, single-valued, integer, Key Attribute
+Name: composite (FName, LName), single-valued, string
+Phone_Number: simple, single-valued, integer
+
+QUALIFICATIONS (Weak entity)
+Name: simple, single-valued, string, Weak Key Attribute
+Type: simple, multi-valued, string
+Date_Received: simple, single-valued, date
+Expiry_Date: simple, single-valued, date
+
+
+
+
