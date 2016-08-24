@@ -29,7 +29,7 @@ INSERT INTO supplier VALUES
 
 CREATE TABLE bookstore
 (city        VARCHAR2(20)  NOT NULL,
-address     VARCHAR2(30)   PRIMARY KEY,
+ address     VARCHAR2(30)   PRIMARY KEY,
 account     CHAR(14)       NOT NULL,
 date_opened   DATE);
 
@@ -91,8 +91,7 @@ INSERT INTO employee VALUES
 INSERT INTO employee VALUES
 ('Debbie','D','Dallas', '023-543-765',   '0215739542', '32', '1800', '21 Lake Road');
 INSERT INTO employee VALUES
-('Tom','N','Mates', '013-643-923',       '0273938492', '30', '2050', '33 Union Street');
-INSERT INTO employee VALUES
+('Tom','N','Mates', '013-643-923',       '0273938492', '30', '2050', '33 Union Street');INSERT INTO employee VALUES
 ('Rebbecca','B','Smith', '075-142-345',  '0214847395', '38', '1525', '33 Dee Street');
 INSERT INTO employee VALUES
 ('Greg','T','Somerville', '087-681-765', '0270394722', '38', '2150', '99 Oyster Road');
@@ -139,7 +138,26 @@ INSERT INTO customer VALUES
 ('22', 'Strawberry Lane', '9016','0007365','Chubby','Checker', '0212546798');
 INSERT INTO customer VALUES
 ('16', 'Princes Street', '9012','0046290','Slim','Dusty', '0279843873');
-
+INSERT INTO customer VALUES
+('11', 'Boiling Down Road','7986','0002233','Jimmy','Johns','');
+INSERT INTO customer VALUES
+('17','Duchess Ave','9016','000010','Callum','Grimmer','0223280679');
+INSERT INTO customer VALUES
+('14','Findlayson Road','9874','0022056','Tim','Shadbolt','0272524455');
+INSERT INTO customer VALUES
+('25','River Street','9710','0024789','Joseph','Parker','');
+INSERT INTO customer VALUES
+('560','George Street','9016','0001010','David','Clark');
+INSERT INTO customer VALUES
+('34', 'Midland Street','9012','0033210','Dave','Brubeck');
+INSERT INTO customer VALUES
+('131a','Queen Street','9016','0035670','Trent','Brown');
+INSERT INTO customer VALUES
+('11','Pitt Street','9016','0668220','Sammy','Dee');
+INSERT INTO customer VALUES
+('2','Wigan Street','9710','0096210','Michael','Peterson');
+INSERT INTO customer VALUES
+('62','Robertson Street','9710','0000223','Foxy','Brown');
 
 
 CREATE TABLE postcode
@@ -151,6 +169,13 @@ INSERT INTO postcode VALUES
 ('9016', 'Dunedin City', 'Dunedin');
 INSERT INTO postcode VALUES
 ('9012', 'South Dunedin', 'Dunedin');
+INSERT INTO postcode VALUES
+('9874','Otahuti','Invercargill');
+INSERT INTO postcode VALUES
+('9710','','Gore');
+INSERT INTO postcode VALUES
+('7896','','Temuka');
+
 
 
 
@@ -164,6 +189,12 @@ INSERT INTO qualifications VALUES
 ('024-613-323', 'First Aid', TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('22-05-2015','DD-MM-YYYY'));
 INSERT INTO qualifications VALUES
 ('023-842-366', 'BSci', TO_DATE('25-10-1999','DD-MM-YYYY'), TO_DATE(''));
+INSERT INTO qualifications VALUES
+('055-923-81','BA English Literature',TO_DATE('12-05-2012','DD-MM-YYYY'),'');
+INSERT INTO qualifications VALUES
+('087-681-76','BCom Marketing',TO_DATE('17/05/13','DD/MM/RR','');
+INSERT INTO qualifications VALUES
+('023-543-765','BCom Marketing',TO_DATE('12/jan/2011','DD/MON/YYYY');
 
 
 
@@ -176,6 +207,12 @@ INSERT INTO qualifications_type VALUES
 ('024-613-323','First Aid', 'Health and Safety');
 INSERT INTO qualifications_type VALUES
 ('023-842-366', 'BSci', 'bachelors degree');
+INSERT INTO qualifications_type VALUES
+('055-923-81','BA English Literature','bachelors degree');
+INSERT INTO qualifications_type VALUES
+('087-681-76','BCom Marketing','bachelors degree');
+INSERT INTO qualifications_type VALUES
+('023-543-765','BCom Marketing','bachelors degree');
 
 
 
@@ -194,9 +231,9 @@ CREATE TABLE book_tran
 (bisbn CHAR (17),
 ttransaction_number CHAR (17));
 
-INSERT INTO supplies VALUES
+INSERT INTO book_tran VALUES
 ('326-1-234923-21-2', '000-0000-1434-455');
-INSERT INTO supplies VALUES
+INSERT INTO book_tran VALUES
 ('321-1-234333-21-8', '000-0000-1234-125');
 
 COMMIT;
