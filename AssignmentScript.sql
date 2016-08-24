@@ -1,8 +1,9 @@
-DROP TABLE supplier;
-DROP TABLE bookstore cascade constraints;
-DROP TABLE book;
-DROP TABLE employee cascade constraints;
-DROP TABLE transactions;
+
+DROP TABLE supplier             cascade constraints;
+DROP TABLE bookstore            cascade constraints;
+DROP TABLE book                 cascade constraints;
+DROP TABLE employee             cascade constraints;
+DROP TABLE transactions         cascade constraints;
 DROP TABLE employee_wage;
 DROP TABLE customer;
 DROP TABLE postcode;
@@ -10,7 +11,6 @@ DROP TABLE qualifications;
 DROP TABLE qualifications_type;
 DROP TABLE supplies;
 DROP TABLE book_tran;
-
 
 
 CREATE TABLE supplier
@@ -26,12 +26,12 @@ INSERT INTO supplier VALUES
 ('26-6843-4856284-68','Paperback Writers','04457484');
 
 
-
 CREATE TABLE bookstore
 (city        VARCHAR2(20)  NOT NULL,
- address     VARCHAR2(30)   PRIMARY KEY,
+address     VARCHAR2(30)   PRIMARY KEY,
 account     CHAR(14)       NOT NULL,
 date_opened   DATE);
+
 
 INSERT INTO bookstore VALUES
 ('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('22-05-1999','DD-MM-YYYY'));
@@ -50,7 +50,7 @@ INSERT INTO bookstore VALUES
 
 CREATE TABLE book
 (title    VARCHAR2(30) NOT NULL,
-isbn   CHAR(17)                         PRIMARY KEY,
+isbn   CHAR(17)              PRIMARY KEY,
 fname    VARCHAR2(15) NOT NULL,
 middle_init    CHAR,
 lname    VARCHAR2(15) NOT NULL,
@@ -91,7 +91,8 @@ INSERT INTO employee VALUES
 INSERT INTO employee VALUES
 ('Debbie','D','Dallas', '023-543-765',   '0215739542', '32', '1800', '21 Lake Road');
 INSERT INTO employee VALUES
-('Tom','N','Mates', '013-643-923',       '0273938492', '30', '2050', '33 Union Street');INSERT INTO employee VALUES
+('Tom','N','Mates', '013-643-923',       '0273938492', '30', '2050', '33 Union Street');
+INSERT INTO employee VALUES
 ('Rebbecca','B','Smith', '075-142-345',  '0214847395', '38', '1525', '33 Dee Street');
 INSERT INTO employee VALUES
 ('Greg','T','Somerville', '087-681-765', '0270394722', '38', '2150', '99 Oyster Road');
@@ -104,12 +105,30 @@ INSERT INTO employee VALUES
 INSERT INTO employee VALUES
 ('Ying','G','Brown', '055-923-819',      '0214984833', '38', '1550', '33 Dee Street');
 
-
 CREATE TABLE employee_wage
 (weekly_hours   NUMBER(2),
 hourly_rate    NUMBER(5),
-wage NUMBER (4));
+wage NUMBER (6),
+PRIMARY KEY (weekly_hours, hourly_rate));
 
+INSERT INTO employee_wage VALUES
+('38', '1525','57950');
+INSERT INTO employee_wage VALUES
+('32', '1800','57600');
+INSERT INTO employee_wage VALUES
+('30', '2050','61500');
+INSERT INTO employee_wage VALUES
+('38', '1520','57760');
+INSERT INTO employee_wage VALUES
+('38', '2150','81700');
+INSERT INTO employee_wage VALUES
+('15', '1925','28875');
+INSERT INTO employee_wage VALUES
+('38', '1900','72200');
+INSERT INTO employee_wage VALUES
+('20', '2000','40000');
+INSERT INTO employee_wage VALUES
+('38', '1550','58900');
 
 
 CREATE TABLE transactions
@@ -126,7 +145,7 @@ INSERT INTO transactions VALUES
 
 
 CREATE TABLE customer
-(street_number NUMBER(3),
+(street_number VARCHAR2(5),
 Street_name VARCHAR2(30),
 postcode NUMBER(4),
 customer_id CHAR (7)            PRIMARY KEY,
@@ -147,17 +166,17 @@ INSERT INTO customer VALUES
 INSERT INTO customer VALUES
 ('25','River Street','9710','0024789','Joseph','Parker','');
 INSERT INTO customer VALUES
-('560','George Street','9016','0001010','David','Clark');
+('560','George Street','9016','0001010','David','Clark','');
 INSERT INTO customer VALUES
-('34', 'Midland Street','9012','0033210','Dave','Brubeck');
+('34', 'Midland Street','9012','0033210','Dave','Brubeck','');
 INSERT INTO customer VALUES
-('131a','Queen Street','9016','0035670','Trent','Brown');
+('131a','Queen Street','9016','0035670','Trent','Brown','0223220987');
 INSERT INTO customer VALUES
-('11','Pitt Street','9016','0668220','Sammy','Dee');
+('11','Pitt Street','9016','0668220','Sammy','Dee','0274429824');
 INSERT INTO customer VALUES
-('2','Wigan Street','9710','0096210','Michael','Peterson');
+('2','Wigan Street','9710','0096210','Michael','Peterson','0211197862');
 INSERT INTO customer VALUES
-('62','Robertson Street','9710','0000223','Foxy','Brown');
+('62','Robertson Street','9710','0000223','Foxy','Brown','0274542211');
 
 
 CREATE TABLE postcode
@@ -192,9 +211,9 @@ INSERT INTO qualifications VALUES
 INSERT INTO qualifications VALUES
 ('055-923-81','BA English Literature',TO_DATE('12-05-2012','DD-MM-YYYY'),'');
 INSERT INTO qualifications VALUES
-('087-681-76','BCom Marketing',TO_DATE('17/05/13','DD/MM/RR','');
+('087-681-76','BCom Marketing',TO_DATE('17/05/13','DD/MM/RR'),'');
 INSERT INTO qualifications VALUES
-('023-543-765','BCom Marketing',TO_DATE('12/jan/2011','DD/MON/YYYY');
+('023-543-765','BCom Marketing',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
 
 
 
@@ -217,8 +236,8 @@ INSERT INTO qualifications_type VALUES
 
 
 CREATE TABLE supplies
-(sbank_account_number CHAR(18),
-bisbn CHAR(17));
+(sbank_account_number CHAR(18) REFERENCES supplier (bank_account_number),
+bisbn CHAR(17) REFERENCES book(isbn));
 
 INSERT INTO supplies VALUES
 ('39-6443-9454523-48','326-1-234923-21-2');
@@ -226,10 +245,9 @@ INSERT INTO supplies VALUES
 ('39-6443-9454523-48','321-1-234333-21-8');
 
 
-
 CREATE TABLE book_tran
-(bisbn CHAR (17),
-ttransaction_number CHAR (17));
+(bisbn CHAR (17)   REFERENCES book(isbn),
+ttransaction_number CHAR (17)  REFERENCES transactions(transaction_number));
 
 INSERT INTO book_tran VALUES
 ('326-1-234923-21-2', '000-0000-1434-455');
