@@ -1,14 +1,13 @@
-
 DROP TABLE supplier             cascade constraints;
 DROP TABLE bookstore            cascade constraints;
 DROP TABLE book                 cascade constraints;
 DROP TABLE employee             cascade constraints;
 DROP TABLE transactions         cascade constraints;
-DROP TABLE employee_wage;
-DROP TABLE customer;
-DROP TABLE postcode;
-DROP TABLE qualifications;
+DROP TABLE employee_wage        cascade constraints;
+DROP TABLE post_code            cascade constraints;
+DROP TABLE customer             cascade constraints;
 DROP TABLE qualifications_type;
+DROP TABLE qualifications;
 DROP TABLE supplies;
 DROP TABLE book_tran;
 
@@ -80,11 +79,10 @@ middle_init    CHAR,
 lname    VARCHAR2(15) NOT NULL,
 ird_number      CHAR(11)      PRIMARY KEY,
 contact_number  CHAR(10),
-weekly_hours   NUMBER(2),
+weekly_hours   NUMBER(2) NOT NULL,
 hourly_rate    NUMBER(5) NOT NULL, /*Currency*/
-baddress VARCHAR2(30) CONSTRAINT baddress_constraint REFERENCES bookstore(address) DISABLE);
+baddress VARCHAR2(30) REFERENCES bookstore(address));
 
-ALTER TABLE employee ENABLE CONSTRAINT baddress_constraint;
 
 INSERT INTO employee VALUES
 ('John','B','Good', '024-613-323',       '0212344505', '38', '1525', '11 Bogan Street');
@@ -93,7 +91,7 @@ INSERT INTO employee VALUES
 INSERT INTO employee VALUES
 ('Tom','N','Mates', '013-643-923',       '0273938492', '30', '2050', '33 Union Street');
 INSERT INTO employee VALUES
-('Rebbecca','B','Smith', '075-142-345',  '0214847395', '38', '1525', '33 Dee Street');
+('Rebbecca','B','Smith', '075-142-345',  '0214847395', '38', '1505', '33 Dee Street');
 INSERT INTO employee VALUES
 ('Greg','T','Somerville', '087-681-765', '0270394722', '38', '2150', '99 Oyster Road');
 INSERT INTO employee VALUES
@@ -105,11 +103,14 @@ INSERT INTO employee VALUES
 INSERT INTO employee VALUES
 ('Ying','G','Brown', '055-923-819',      '0214984833', '38', '1550', '33 Dee Street');
 
+
+
 CREATE TABLE employee_wage
-(weekly_hours   NUMBER(2),
-hourly_rate    NUMBER(5),
+(week_hours   NUMBER(2),
+hour_rate    NUMBER(5),
 wage NUMBER (6),
-PRIMARY KEY (weekly_hours, hourly_rate));
+PRIMARY KEY (week_hours, hour_rate)
+);
 
 INSERT INTO employee_wage VALUES
 ('38', '1525','57950');
@@ -118,7 +119,7 @@ INSERT INTO employee_wage VALUES
 INSERT INTO employee_wage VALUES
 ('30', '2050','61500');
 INSERT INTO employee_wage VALUES
-('38', '1520','57760');
+('38', '1520','57750');
 INSERT INTO employee_wage VALUES
 ('38', '2150','81700');
 INSERT INTO employee_wage VALUES
@@ -132,8 +133,8 @@ INSERT INTO employee_wage VALUES
 
 
 CREATE TABLE transactions
-("date" DATE,
-"time" DATE,
+("date" DATE NOT NULL,
+"time" DATE NOT NULL,
 transaction_number CHAR (17)    PRIMARY KEY);
 
 INSERT INTO transactions VALUES
@@ -143,15 +144,33 @@ INSERT INTO transactions VALUES
 
 
 
+CREATE TABLE post_code
+(pcode NUMBER (4) PRIMARY KEY,
+suburb VARCHAR (15),
+city VARCHAR (15) NOT NULL
+);
+
+INSERT INTO post_code VALUES
+('9016', 'Dunedin City', 'Dunedin');
+INSERT INTO post_code VALUES
+('9012', 'South Dunedin', 'Dunedin');
+INSERT INTO post_code VALUES
+('9874','Otahuti','Invercargill');
+INSERT INTO post_code VALUES
+('7986','','Gore');
+INSERT INTO post_code VALUES
+('9710','Helensbrook','Milton');
+
 
 CREATE TABLE customer
 (street_number VARCHAR2(5),
 Street_name VARCHAR2(30),
-postcode NUMBER(4),
+postcode NUMBER(4) NOT NULL REFERENCES post_code(pcode),
 customer_id CHAR (7)            PRIMARY KEY,
-fname VARCHAR(15),
-lname VARCHAR(15),
-phone CHAR (10));
+fname VARCHAR(15) NOT NULL,
+lname VARCHAR(15) NOT NULL,
+phone CHAR (10)
+);
 
 INSERT INTO customer VALUES
 ('22', 'Strawberry Lane', '9016','0007365','Chubby','Checker', '0212546798');
@@ -179,65 +198,55 @@ INSERT INTO customer VALUES
 ('62','Robertson Street','9710','0000223','Foxy','Brown','0274542211');
 
 
-CREATE TABLE postcode
-(postcode NUMBER (4)            PRIMARY KEY,
-suburb VARCHAR (15),
-city VARCHAR (15));
 
-INSERT INTO postcode VALUES
-('9016', 'Dunedin City', 'Dunedin');
-INSERT INTO postcode VALUES
-('9012', 'South Dunedin', 'Dunedin');
-INSERT INTO postcode VALUES
-('9874','Otahuti','Invercargill');
-INSERT INTO postcode VALUES
-('9710','','Gore');
-INSERT INTO postcode VALUES
-('7896','','Temuka');
+CREATE TABLE qualifications_type
+(eird_number CHAR (11) NOT NULL REFERENCES employee (ird_number),
+qname VARCHAR(30) NOT NULL,
+qtype VARCHAR(20) NOT NULL
+);
 
+
+INSERT INTO qualifications_type VALUES
+('024-613-323', 'First Aid', 'Health and Safety');
+INSERT INTO qualifications_type VALUES
+('023-842-366', 'BSci', 'Computer Science');
+INSERT INTO qualifications_type VALUES
+('055-923-819', 'BA','English Literature');
+INSERT INTO qualifications_type VALUES
+('087-681-765', 'BCom','Marketing');
+INSERT INTO qualifications_type VALUES
+('023-543-765', 'BCom','Finance');
+INSERT INTO qualifications_type VALUES
+('023-543-765', 'BA', 'English Literature');
 
 
 
 CREATE TABLE qualifications
-(eird_number CHAR (11),
-qname VARCHAR(30),
+(qird_number CHAR (11) NOT NULL REFERENCES employee (ird_number),
+qname VARCHAR(30) NOT NULL,
 date_received DATE,
-expiry_date DATE);
+expiry_date DATE
+);
 
 INSERT INTO qualifications VALUES
 ('024-613-323', 'First Aid', TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('22-05-2015','DD-MM-YYYY'));
 INSERT INTO qualifications VALUES
-('023-842-366', 'BSci', TO_DATE('25-10-1999','DD-MM-YYYY'), TO_DATE(''));
+('023-842-366', 'BSci', TO_DATE('25-10-1999','DD-MM-YYYY'),'');
 INSERT INTO qualifications VALUES
-('055-923-81','BA English Literature',TO_DATE('12-05-2012','DD-MM-YYYY'),'');
+('055-923-819','BA',TO_DATE('12-05-2012','DD-MM-YYYY'),'');
 INSERT INTO qualifications VALUES
-('087-681-76','BCom Marketing',TO_DATE('17/05/13','DD/MM/RR'),'');
+('087-681-765','BCom',TO_DATE('17/05/13','DD/MM/RR'),'');
 INSERT INTO qualifications VALUES
-('023-543-765','BCom Marketing',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
-
-
-
-CREATE TABLE qualifications_type
-(eird_number CHAR(11),
-qname VARCHAR(30),
-qtype VARCHAR(20));
-
-INSERT INTO qualifications_type VALUES
-('024-613-323','First Aid', 'Health and Safety');
-INSERT INTO qualifications_type VALUES
-('023-842-366', 'BSci', 'bachelors degree');
-INSERT INTO qualifications_type VALUES
-('055-923-81','BA English Literature','bachelors degree');
-INSERT INTO qualifications_type VALUES
-('087-681-76','BCom Marketing','bachelors degree');
-INSERT INTO qualifications_type VALUES
-('023-543-765','BCom Marketing','bachelors degree');
+('023-543-765','BCom',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
+INSERT INTO qualifications VALUES
+('023-543-765','BA',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
 
 
 
 CREATE TABLE supplies
 (sbank_account_number CHAR(18) REFERENCES supplier (bank_account_number),
-bisbn CHAR(17) REFERENCES book(isbn));
+bisbn CHAR(17) REFERENCES book(isbn),
+PRIMARY KEY (sbank_account_number, bisbn));
 
 INSERT INTO supplies VALUES
 ('39-6443-9454523-48','326-1-234923-21-2');
@@ -245,13 +254,20 @@ INSERT INTO supplies VALUES
 ('39-6443-9454523-48','321-1-234333-21-8');
 
 
+
 CREATE TABLE book_tran
 (bisbn CHAR (17)   REFERENCES book(isbn),
-ttransaction_number CHAR (17)  REFERENCES transactions(transaction_number));
+ttransaction_number CHAR (17)  REFERENCES transactions(transaction_number),
+units NUMBER(2),
+PRIMARY KEY (bisbn, ttransaction_number));
 
 INSERT INTO book_tran VALUES
-('326-1-234923-21-2', '000-0000-1434-455');
+('326-1-234923-21-2', '000-0000-1434-455','1');
 INSERT INTO book_tran VALUES
-('321-1-234333-21-8', '000-0000-1234-125');
+('336-1-285647-32-6', '000-0000-1434-455','2');
+INSERT INTO book_tran VALUES
+('323-3-323434-76-7', '000-0000-1434-455','1');
+INSERT INTO book_tran VALUES
+('321-1-234333-21-8', '000-0000-1234-125','1');
 
 COMMIT;
