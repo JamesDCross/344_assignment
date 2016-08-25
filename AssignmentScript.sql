@@ -6,7 +6,7 @@ DROP TABLE transactions         cascade constraints;
 DROP TABLE employee_wage        cascade constraints;
 DROP TABLE post_code            cascade constraints;
 DROP TABLE customer             cascade constraints;
-DROP TABLE qualifications_type;
+DROP TABLE qualifications_type  cascade constraints;
 DROP TABLE qualifications;
 DROP TABLE supplies;
 DROP TABLE book_tran;
@@ -15,7 +15,8 @@ DROP TABLE book_tran;
 CREATE TABLE supplier
 (bank_account_number    CHAR(18)    PRIMARY KEY,
 company_name VARCHAR2(30) NOT NULL,
-contact_number CHAR(10));
+contact_number CHAR(10)
+);
 
 INSERT INTO supplier VALUES
 ('39-6443-9454523-48','National Scholastic','034191123');
@@ -29,7 +30,8 @@ CREATE TABLE bookstore
 (city        VARCHAR2(20)  NOT NULL,
 address     VARCHAR2(30)   PRIMARY KEY,
 account     CHAR(14)       NOT NULL,
-date_opened   DATE);
+date_opened   DATE
+);
 
 
 INSERT INTO bookstore VALUES
@@ -54,7 +56,8 @@ fname    VARCHAR2(15) NOT NULL,
 middle_init    CHAR,
 lname    VARCHAR2(15) NOT NULL,
 price    NUMBER(5), /*Currency*/
-amount_in_stock   NUMBER(2));
+amount_in_stock   NUMBER(2)
+);
 
 INSERT INTO book VALUES
 ('Rusty Bed Springs', '326-1-234923-21-2', 'I','P','Knightley','2950', '2');
@@ -81,7 +84,8 @@ ird_number      CHAR(11)      PRIMARY KEY,
 contact_number  CHAR(10),
 weekly_hours   NUMBER(2) NOT NULL,
 hourly_rate    NUMBER(5) NOT NULL, /*Currency*/
-baddress VARCHAR2(30) REFERENCES bookstore(address));
+baddress VARCHAR2(30) REFERENCES bookstore(address)
+);
 
 
 INSERT INTO employee VALUES
@@ -132,17 +136,6 @@ INSERT INTO employee_wage VALUES
 ('38', '1550','58900');
 
 
-CREATE TABLE transactions
-("date" DATE NOT NULL,
-"time" DATE NOT NULL,
-transaction_number CHAR (17)    PRIMARY KEY);
-
-INSERT INTO transactions VALUES
-(TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('13:34:23','hh24:mi:ss'), '000-0000-1434-455');
-INSERT INTO transactions VALUES
-(TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('09:49:17','hh24:mi:ss'), '000-0000-1234-125');
-
-
 
 CREATE TABLE post_code
 (pcode NUMBER (4) PRIMARY KEY,
@@ -179,7 +172,7 @@ INSERT INTO customer VALUES
 INSERT INTO customer VALUES
 ('11', 'Boiling Down Road','7986','0002233','Jimmy','Johns','');
 INSERT INTO customer VALUES
-('17','Duchess Ave','9016','000010','Callum','Grimmer','0223280679');
+('17','Duchess Ave','9016','0000010','Callum','Grimmer','0223280679');
 INSERT INTO customer VALUES
 ('14','Findlayson Road','9874','0022056','Tim','Shadbolt','0272524455');
 INSERT INTO customer VALUES
@@ -198,11 +191,34 @@ INSERT INTO customer VALUES
 ('62','Robertson Street','9710','0000223','Foxy','Brown','0274542211');
 
 
+CREATE TABLE qualifications
+(qird_number CHAR (11) NOT NULL REFERENCES employee (ird_number),
+qname VARCHAR(30) NOT NULL,
+date_received DATE,
+expiry_date DATE,
+PRIMARY KEY (qird_number, qname) 
+);
+
+INSERT INTO qualifications VALUES
+('024-613-323', 'First Aid', TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('22-05-2015','DD-MM-YYYY'));
+INSERT INTO qualifications VALUES
+('023-842-366', 'BSci', TO_DATE('25-10-1999','DD-MM-YYYY'),'');
+INSERT INTO qualifications VALUES
+('055-923-819','BA',TO_DATE('12-05-2012','DD-MM-YYYY'),'');
+INSERT INTO qualifications VALUES
+('087-681-765','BCom',TO_DATE('17/05/13','DD/MM/RR'),'');
+INSERT INTO qualifications VALUES
+('023-543-765','BCom',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
+INSERT INTO qualifications VALUES
+('023-543-765','BA',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
+
+
 
 CREATE TABLE qualifications_type
 (eird_number CHAR (11) NOT NULL REFERENCES employee (ird_number),
 qname VARCHAR(30) NOT NULL,
-qtype VARCHAR(20) NOT NULL
+qtype VARCHAR(20) NOT NULL,
+FOREIGN KEY (eird_number, qname) REFERENCES qualifications (qird_number, qname)
 );
 
 
@@ -221,28 +237,6 @@ INSERT INTO qualifications_type VALUES
 
 
 
-CREATE TABLE qualifications
-(qird_number CHAR (11) NOT NULL REFERENCES employee (ird_number),
-qname VARCHAR(30) NOT NULL,
-date_received DATE,
-expiry_date DATE
-);
-
-INSERT INTO qualifications VALUES
-('024-613-323', 'First Aid', TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('22-05-2015','DD-MM-YYYY'));
-INSERT INTO qualifications VALUES
-('023-842-366', 'BSci', TO_DATE('25-10-1999','DD-MM-YYYY'),'');
-INSERT INTO qualifications VALUES
-('055-923-819','BA',TO_DATE('12-05-2012','DD-MM-YYYY'),'');
-INSERT INTO qualifications VALUES
-('087-681-765','BCom',TO_DATE('17/05/13','DD/MM/RR'),'');
-INSERT INTO qualifications VALUES
-('023-543-765','BCom',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
-INSERT INTO qualifications VALUES
-('023-543-765','BA',TO_DATE('12/jan/2011','DD/MON/YYYY'),'');
-
-
-
 CREATE TABLE supplies
 (sbank_account_number CHAR(18) REFERENCES supplier (bank_account_number),
 bisbn CHAR(17) REFERENCES book(isbn),
@@ -255,19 +249,59 @@ INSERT INTO supplies VALUES
 
 
 
+CREATE TABLE transactions
+("date" DATE NOT NULL,
+"time" DATE NOT NULL,
+transaction_number CHAR (17)    PRIMARY KEY,
+eird_number CHAR(11)  REFERENCES employee (ird_number),
+ccustomer_id CHAR (7) REFERENCES customer (customer_id)
+);
+
+INSERT INTO transactions VALUES
+(TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('13:34:23','hh24:mi:ss'), '000-0000-1434-455','073-834-552','0007365');
+INSERT INTO transactions VALUES
+(TO_DATE('24-06-2013','DD-MM-YYYY'), TO_DATE('09:49:11','hh24:mi:ss'), '000-0000-1234-125','024-613-323','0035670');
+INSERT INTO transactions VALUES
+(TO_DATE('02-08-2013','DD-MM-YYYY'), TO_DATE('11:40:57','hh24:mi:ss'), '000-0000-1234-126','075-142-345','0022056');
+INSERT INTO transactions VALUES
+(TO_DATE('13-09-2013','DD-MM-YYYY'), TO_DATE('15:23:31','hh24:mi:ss'), '000-0000-1234-127','013-643-923','0035670');
+INSERT INTO transactions VALUES
+(TO_DATE('17-11-2013','DD-MM-YYYY'), TO_DATE('12:43:04','hh24:mi:ss'), '000-0000-1234-128','075-142-345','0000010');
+INSERT INTO transactions VALUES
+(TO_DATE('30-11-2013','DD-MM-YYYY'), TO_DATE('16:31:23','hh24:mi:ss'), '000-0000-1234-200','024-613-323','0668220');
+INSERT INTO transactions VALUES
+(TO_DATE('22-01-2014','DD-MM-YYYY'), TO_DATE('12:59:29','hh24:mi:ss'), '000-0000-1234-203','075-142-345','0007365');
+INSERT INTO transactions VALUES
+(TO_DATE('22-03-2014','DD-MM-YYYY'), TO_DATE('14:03:40','hh24:mi:ss'), '000-0000-1234-204','023-543-765','0668220');
+
+
 CREATE TABLE book_tran
-(bisbn CHAR (17)   REFERENCES book(isbn),
-ttransaction_number CHAR (17)  REFERENCES transactions(transaction_number),
+(bisbn CHAR (17)  NOT NULL  REFERENCES book(isbn),
+ttransaction_number CHAR (17) NOT NULL  REFERENCES transactions(transaction_number),
 units NUMBER(2),
-PRIMARY KEY (bisbn, ttransaction_number));
+PRIMARY KEY (bisbn, ttransaction_number)
+);
 
 INSERT INTO book_tran VALUES
-('326-1-234923-21-2', '000-0000-1434-455','1');
+('326-1-234923-21-2', '000-0000-1434-455', '1');
 INSERT INTO book_tran VALUES
-('336-1-285647-32-6', '000-0000-1434-455','2');
+('336-1-285647-32-6', '000-0000-1434-455', '2');
 INSERT INTO book_tran VALUES
-('323-3-323434-76-7', '000-0000-1434-455','1');
+('323-3-323434-76-7', '000-0000-1434-455', '1');
 INSERT INTO book_tran VALUES
-('321-1-234333-21-8', '000-0000-1234-125','1');
+('321-1-234333-21-8', '000-0000-1234-125', '1');
+INSERT INTO book_tran VALUES
+('343-1-234352-21-2', '000-0000-1234-126', '1');
+INSERT INTO book_tran VALUES
+('323-3-323434-76-7', '000-0000-1234-127', '1');
+INSERT INTO book_tran VALUES
+('284-1-573847-98-4', '000-0000-1234-128', '1');
+INSERT INTO book_tran VALUES
+('343-1-234352-21-2', '000-0000-1234-200', '2');
+INSERT INTO book_tran VALUES
+('336-1-285647-32-6', '000-0000-1234-203', '1');
+INSERT INTO book_tran VALUES
+('634-2-125445-65-2', '000-0000-1234-204', '1');
+
 
 COMMIT;
