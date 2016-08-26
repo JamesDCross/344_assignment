@@ -34,18 +34,13 @@ date_opened   DATE
 );
 
 
-INSERT INTO bookstore VALUES
-('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('22-05-1999','DD-MM-YYYY'));
-INSERT INTO bookstore VALUES
-('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('08-01-1998','DD-MM-YYYY'));
-INSERT INTO bookstore VALUES
-('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('14-06-1997','DD-MM-YYYY'));
-INSERT INTO bookstore VALUES
-('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('14-12-2003','DD-MM-YYYY'));
-INSERT INTO bookstore VALUES
-('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('24-12-2001','DD-MM-YYYY'));
-INSERT INTO bookstore VALUES
-('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('31-10-2009','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('22-05-1999','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('08-01-1998','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('14-06-1997','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('14-12-2003','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('24-12-2001','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('31-10-2009','DD-MM-YYYY'));
+INSERT INTO bookstore VALUES ('Beijing', '101500 MiYun',  '0123-4567-6453', TO_DATE('03-01-1986','DD-MM-YYYY'));
 
 
 
@@ -104,15 +99,15 @@ INSERT INTO employee VALUES
 ('Wayne','','Kerr', '023-842-366',       '0273231043', '38', '1900', '11 Bogan Street');
 INSERT INTO employee VALUES
 ('Leroy','J','Brown', '073-834-552',     '0215551234', '20', '2000', '21 Lake Road');
-INSERT INTO employee VALUES
-('Ying','G','Brown', '055-923-819',      '0214984833', '38', '1550', '33 Dee Street');
+INSERT INTO employee VALUES('Ying','G','Brown', '055-923-819',      '0214984833', '38', '1550', '33 Dee Street');
+INSERT INTO employee VALUES('Wei', NULL,'Zhao', '012-923-819',      '0217777777', '77', '7777', '33 Dee Street');
 
 
 
 CREATE TABLE employee_wage
 (week_hours   NUMBER(2),
 hour_rate    NUMBER(5),
-wage NUMBER (6),
+wage NUMBER (6) default 1000,
 PRIMARY KEY (week_hours, hour_rate)
 );
 
@@ -196,7 +191,7 @@ CREATE TABLE qualifications
 qname VARCHAR(30) NOT NULL,
 date_received DATE,
 expiry_date DATE,
-PRIMARY KEY (qird_number, qname) 
+PRIMARY KEY (qird_number, qname)
 );
 
 INSERT INTO qualifications VALUES
