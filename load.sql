@@ -1,15 +1,15 @@
-DROP TABLE qualifications_type;
-DROP TABLE qualifications;
 DROP TABLE supplies;
 DROP TABLE book_tran;
-DROP TABLE transactions         cascade constraints;
-DROP TABLE customer             cascade constraints;
-DROP TABLE postcode            cascade constraints;
-DROP TABLE employee             cascade constraints;
-DROP TABLE employee_wage        cascade constraints;
-DROP TABLE supplier cascade constraints;
-DROP table bookstore cascade constraints;
-DROP TABLE book                 cascade constraints;
+DROP TABLE qualifications_type;
+DROP TABLE qualifications;
+DROP TABLE transactions;
+DROP TABLE customer;
+DROP TABLE postcode;
+DROP TABLE employee;
+DROP TABLE employee_wage;
+DROP TABLE supplier;
+DROP table bookstore;
+DROP TABLE book;
 
 
 CREATE TABLE supplier
