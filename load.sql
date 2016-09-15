@@ -19,20 +19,21 @@ CREATE TABLE bookstore
 (city        VARCHAR2(20)  NOT NULL,
 address     VARCHAR2(30)   PRIMARY KEY,
 account     CHAR(14)       NOT NULL,
-date_opened   DATE);
+date_opened   DATE      ,
+total_salary    NUMBER(8) NOT NULL);
 
 INSERT INTO bookstore VALUES
-('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('22-05-1999','DD-MM-YYYY'));
+('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('22-05-1999','DD-MM-YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('08-01-1998','DD-MM-YYYY'));
+('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('08-01-1998','DD-MM-YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('14-06-1997','DD-MM-YYYY'));
+('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('14-06-1997','DD-MM-YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('14-12-2003','DD-MM-YYYY'));
+('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('14-12-2003','DD-MM-YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('24-12-2001','DD-MM-YYYY'));
+('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('24-12-2001','DD-MM-YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('31-10-2009','DD-MM-YYYY'));
+('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('31-10-2009','DD-MM-YYYY'), 0);
 
 
 
@@ -91,8 +92,10 @@ INSERT INTO supplies VALUES
 CREATE TABLE employee_wage
 (weekly_hours   NUMBER(2),
 hourly_rate    NUMBER(5),
-wage NUMBER (8) default 1000, 
+wage NUMBER (8) default 1000,
 CONSTRAINT employee_wage_pk PRIMARY KEY(weekly_hours, hourly_rate));
+
+@trigger_employee_wage.sql
 
 INSERT INTO employee_wage VALUES('38', '1525','57950');
 INSERT INTO employee_wage VALUES('38', '1600','60800');
@@ -117,6 +120,8 @@ hourly_rate    NUMBER(5) NOT NULL, /*Currency*/
 baddress VARCHAR2(30) CONSTRAINT baddress_constraint REFERENCES bookstore(address),
 CONSTRAINT wage_constraint FOREIGN KEY(weekly_hours, hourly_rate) REFERENCES employee_wage(weekly_hours, hourly_rate));
 
+@trigger_total_salary.sql
+
 INSERT INTO employee VALUES
 ('John','B','Good', '024-613-323',       '0212344505', 38, 1525, (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
@@ -140,7 +145,7 @@ INSERT INTO employee VALUES
 
 
 /**
-Randomly select 1 addresses from bookstore 
+Randomly select 1 addresses from bookstore
 select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2;
 */
 
@@ -219,7 +224,7 @@ INSERT INTO transactions VALUES
       	(select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2),
         (select customer_id from (select * from customer order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2));
 INSERT INTO transactions VALUES
-(TO_DATE('13-09-2013','DD-MM-YYYY'), TO_DATE('15:23:31','hh24:mi:ss'), '000-0000-1234-127',      
+(TO_DATE('13-09-2013','DD-MM-YYYY'), TO_DATE('15:23:31','hh24:mi:ss'), '000-0000-1234-127',
 	(select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2),
         (select customer_id from (select * from customer order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2));
 INSERT INTO transactions VALUES
@@ -297,10 +302,10 @@ CONSTRAINT qualifications_pk PRIMARY KEY(eird_number, qname));
 
 
 INSERT INTO qualifications VALUES
-((select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2), 
+((select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2),
 	'First Aid', TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('22-05-2015','DD-MM-YYYY'));
 INSERT INTO qualifications VALUES
-((select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2), 
+((select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2),
 	'BSci', TO_DATE('25-10-1999','DD-MM-YYYY'), TO_DATE(''));
 
 CREATE TABLE qualifications_type
@@ -316,10 +321,10 @@ INSERT INTO qualifications_type VALUES
 	'Health and Safety');
 INSERT INTO qualifications_type VALUES
 (	(select eird_number from QUALIFICATIONS where rownum = 1),
-        (select qname from QUALIFICATIONS where rownum = 1), 
+        (select qname from QUALIFICATIONS where rownum = 1),
 	'bachelors degree');
 /**
-ask teach why the rownum = 2 return null? 
+ask teach why the rownum = 2 return null?
 */
 
 
@@ -329,5 +334,3 @@ INSERT INTO qualifications_type VALUES
 INSERT INTO qualifications_type VALUES
 ('023-842-366', 'BSci', 'bachelors degree');
 */
-
-
