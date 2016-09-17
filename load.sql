@@ -23,17 +23,17 @@ date_opened   DATE      ,
 total_salary    NUMBER(8) NOT NULL);
 
 INSERT INTO bookstore VALUES
-('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('22-05-1999','DD-MM-YYYY'), 0);
+('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('05/22/1999','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('08-01-1998','DD-MM-YYYY'), 0);
+('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('01/08/1998','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('14-06-1997','DD-MM-YYYY'), 0);
+('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('06/14/1997','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('14-12-2003','DD-MM-YYYY'), 0);
+('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('12/14/2003','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('24-12-2001','DD-MM-YYYY'), 0);
+('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('12/24/2001','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('31-10-2009','DD-MM-YYYY'), 0);
+('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('10/31/2009','MM/DD/YYYY'), 0);
 
 
 
