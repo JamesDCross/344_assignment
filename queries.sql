@@ -52,3 +52,31 @@ select fname, lname of employee who handled transactions involve customer lives 
 select e.fname, e.lname
 from employee e, transactions t, customer c 
 where c.postcode=9012 and c.CUSTOMER_ID = t.CCUSTOMER_ID and t.EIRD_NUMBER = e.IRD_NUMBER;
+/*
+q09
+create employee, triggers create_employee
+*/
+INSERT INTO employee VALUES
+('Callum','L','Grimmer','222-222-222', '0223280608', '50','2500','11 Bogan Street');
+
+/*
+q10
+change employee salary, triggers modify_employee
+*/
+UPDATE employee
+SET weekly_hours = 50
+WHERE ird_number = 024-613-323;
+
+/*
+q11
+remove employee, triggers delete_employee
+*/
+DELETE FROM employee
+WHERE ird_number = 023-842-366;
+
+/*
+q12
+remove last employee at a bookstore, triggers delete_employee_check and raises zero_employee exception
+*/
+DELETE FROM employee
+WHERE ird_number = 087-681-765;
