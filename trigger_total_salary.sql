@@ -1,42 +1,55 @@
-create or replace trigger r1
-after insert on employee
-for each row
-begin
-        update bookstore
-        set TOTAL_SALARY = TOTAL_SALARY + :NEW.WEEKLY_HOURS * :NEW.HOURLY_RATE
-        where address = :NEW.baddress;
-end;
+/**
+  * Triggers upon changes that would effect a store's total salary
+  */
+
+--New employee
+CREATE OR REPLACE TRIGGER create_employee
+        AFTER INSERT ON employee
+        FOR EACH ROW
+BEGIN
+        UPDATE bookstore
+        SET total_salary = total_salary + :NEW.weekly_hours * :NEW.hourly_rate
+        WHERE address = :NEW.baddress;
+END;
 /
 
-create or replace trigger r2
-after update of weekly_hours, hourly_rate on employee
-for each row
-begin
-        update bookstore
-        set total_salary = total_salary + :NEW.WEEKLY_HOURS * :NEW.HOURLY_RATE - :old.weekly_hours * :old.hourly_rate
-        where address = :new.baddress;
-end;
+--Employee changes store with new hourly_rate and/or weekly_hours
+CREATE OR REPLACE TRIGGER modify_employee
+        AFTER UPDATE ON weekly_hours,hourly_rate,baddress on employee
+        FOR EACH ROW
+BEGIN
+        UPDATE bookstore
+        SET total_salary = total_salary + :NEW.weekly_hours * :NEW.hourly_rate
+        WHERE address = :new.baddress;
+        UPDATE bookstore
+        SET total_salary = total_salary - :OLD.weekly_hours * :OLD.hourly_rate
+        WHERE address = :old.baddress;
+END;
+/
+--Employee postion termination
+CREATE OR REPLACE TRIGGER delete_employee
+        AFTER DELETE ON employee
+        FOR EACH ROW
+BEGIN
+                UPDATE bookstore
+                SET total_salary = total_salary - :OLD.weekly_hours * :OLD.hourly_rate
+                WHERE address = :old.baddress;
+END;
 /
 
-create or replace trigger r3
-after update of weekly_hours, hourly_rate on employee
-for each row
-begin
-        update bookstore
-        set total_salary = total_salary + :NEW.WEEKLY_HOURS * :NEW.HOURLY_RATE
-        where address = :new.baddress;
-        update bookstore
-        set total_salary = total_salary - :old.weekly_hours * :old.hourly_rate
-        where address = :old.baddress;
-end;
-/
-
-create or replace trigger r4
-after delete on employee
-for each row
-begin
-        update bookstore
-        set total_salary = total_salary - :old.weekly_hours * :old.hourly_rate
-        where address = :old.baddress;
-end;
+--Check exception trigger
+CREATE OR REPLACE TRIGGER delete_employee_check
+        BEFORE DELETE ON employee
+        FOR EACH ROW
+DECLARE
+        zero_employees EXCEPTION;
+BEGIN
+        IF 0 = (SELECT COUNT(*) 
+        FROM employee, bookstore
+        WHERE baddress = b.address); THEN
+                RAISE zero_employees;
+EXCEPTION
+        WHEN zero_employees THEN
+        RAISE_APPLICATION_ERROR( -20001,'Cannot have zero employees at a store');
+END;
 /
