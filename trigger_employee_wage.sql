@@ -1,7 +1,7 @@
-create or replace trigger check_wage_1
-before insert or update on employee_wage
-for each row
-begin
-        :NEW.WAGE := :NEW.WEEKLY_HOURS * :NEW.HOURLY_RATE;
-end;
+CREATE OR REPLACE TRIGGER check_wage_1
+        BEFORE INSERT OR UPDATE ON employee_wage
+        FOR EACH ROW
+BEGIN
+        :NEW.wage := :NEW.weekly_hours * :NEW.hourly_rate;
+END;
 /
