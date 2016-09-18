@@ -39,12 +39,12 @@ END;
 
 --Check exception trigger
 CREATE OR REPLACE TRIGGER delete_employee_check
-        BEFORE DELETE ON employee
+        BEFORE DELETE ON employee OR UPDATE ON baddress;
         FOR EACH ROW
 DECLARE
         zero_employees EXCEPTION;
 BEGIN
-        IF 0 = (SELECT COUNT(*) 
+        IF 1 = (SELECT COUNT(*) 
         FROM employee, bookstore
         WHERE baddress = b.address); THEN
                 RAISE zero_employees;
