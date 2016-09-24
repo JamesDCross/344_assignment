@@ -16,24 +16,25 @@ DROP table bookstore;
 
 
 CREATE TABLE bookstore
-(city        VARCHAR2(20)  NOT NULL,
-address     VARCHAR2(30)   PRIMARY KEY,
-account     CHAR(14)       NOT NULL,
+(storeID     VARCHAR2(7) PRIMARY KEY,
+city        VARCHAR2(20)  NOT NULL,
+address     VARCHAR2(30)   NOT NULL,
+account     CHAR(15)       NOT NULL,
 date_opened   DATE      ,
 total_salary    NUMBER(8) NOT NULL);
 
 INSERT INTO bookstore VALUES
-('Milton', '33 Union Street', '0234-9871-8373', TO_DATE('05/22/1999','MM/DD/YYYY'), 0);
+('0001', 'Milton', '33 Union Street', '0234-9871-8373', TO_DATE('05/22/1999','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('01/08/1998','MM/DD/YYYY'), 0);
+('0002', 'Bluff', '99 Oyster Road', '0453-1543-8532', TO_DATE('01/08/1998','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('06/14/1997','MM/DD/YYYY'), 0);
+('0003', 'Invercargill', '33 Dee Street', '0324-9553-8443', TO_DATE('06/14/1997','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('12/14/2003','MM/DD/YYYY'), 0);
+('0004', 'Waihola', '21 Lake Road', '0334-9321-7673', TO_DATE('12/14/2003','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('12/24/2001','MM/DD/YYYY'), 0);
+('0005', 'Gore', '11 Bogan Street', '0854-6354-9142', TO_DATE('12/24/2001','MM/DD/YYYY'), 0);
 INSERT INTO bookstore VALUES
-('Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('10/31/2009','MM/DD/YYYY'), 0);
+('0006','Temuka', '69 Kina Ave',  '0534-9143-6453', TO_DATE('10/31/2009','MM/DD/YYYY'), 0);
 
 
 
@@ -117,29 +118,29 @@ ird_number      CHAR(11)      PRIMARY KEY,
 contact_number  CHAR(10),
 weekly_hours   NUMBER(2),
 hourly_rate    NUMBER(5) NOT NULL, /*Currency*/
-baddress VARCHAR2(30) CONSTRAINT baddress_constraint REFERENCES bookstore(address),
+bookstoreID VARCHAR2(7) CONSTRAINT bookstore_ID_constraint REFERENCES bookstore(storeID),
 CONSTRAINT wage_constraint FOREIGN KEY(weekly_hours, hourly_rate) REFERENCES employee_wage(weekly_hours, hourly_rate));
 
 @trigger_total_salary.sql
 
 INSERT INTO employee VALUES
-('John','B','Good', '024-613-323',       '0212344505', 38, 1525, (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('John','B','Good', '024-613-323',       '0212344505', 38, 1525, (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Debbie','D','Dallas', '023-543-765',   '0215739542', 32, 1800, (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Debbie','D','Dallas', '023-543-765',   '0215739542', 32, 1800, (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Tom','N','Mates', '013-643-923',       '0273938492', '38', 1600, (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Tom','N','Mates', '013-643-923',       '0273938492', '38', 1600, (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Rebbecca','B','Smith', '075-142-345',  '0214847395', '40', '1700', (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Rebbecca','B','Smith', '075-142-345',  '0214847395', '40', '1700', (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Greg','T','Somerville', '087-681-765', '0270394722', '40', '1500', (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Greg','T','Somerville', '087-681-765', '0270394722', '40', '1500', (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Todd','A','BlackAdder', '091-813-913', '0215738375', '35', '1750', (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Todd','A','BlackAdder', '091-813-913', '0215738375', '35', '1750', (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Wayne','','Kerr', '023-842-366',       '0273231043', '35', '1850', (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Wayne','','Kerr', '023-842-366',       '0273231043', '35', '1850', (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Leroy','J','Brown', '073-834-552',     '0215551234', '32', '1900', (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Leroy','J','Brown', '073-834-552',     '0215551234', '32', '1900', (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 INSERT INTO employee VALUES
-('Ying','G','Brown', '055-923-819',      '0214984833', '38', '1600', (select address from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
+('Ying','G','Brown', '055-923-819',      '0214984833', '38', '1600', (select storeID from (select * from bookstore order by DBMS_RANDOM.RANDOM) WHERE rownum < 2));
 
 
 
@@ -205,7 +206,7 @@ INSERT INTO customer VALUES
 CREATE TABLE transactions
 (TDATE DATE NOT NULL,
  TTIME DATE NOT NULL,
-transaction_number CHAR (17)    PRIMARY KEY,
+transaction_number CHAR (18)    PRIMARY KEY,
 eird_number CHAR(11)  REFERENCES employee (ird_number),
 ccustomer_id CHAR (7) REFERENCES customer (customer_id)
 );
@@ -248,7 +249,7 @@ INSERT INTO transactions VALUES
 
 CREATE TABLE book_tran
 (bisbn CHAR (17)   REFERENCES book(isbn),
-ttransaction_number CHAR (17)  REFERENCES transactions(transaction_number),
+ttransaction_number CHAR (18)  REFERENCES transactions(transaction_number),
 CONSTRAINT book_tran_pk PRIMARY KEY(bisbn, ttransaction_number));
 
 INSERT INTO book_tran VALUES(
