@@ -211,6 +211,8 @@ eird_number CHAR(11)  REFERENCES employee (ird_number),
 ccustomer_id CHAR (7) REFERENCES customer (customer_id)
 );
 
+
+/**
 INSERT INTO transactions VALUES
 (TO_DATE('22-05-2013','DD-MM-YYYY'), TO_DATE('13:34:23','hh24:mi:ss'),'000-0000-1234-124',
 	(select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2),
@@ -244,7 +246,7 @@ INSERT INTO transactions VALUES
 (TO_DATE('22-03-2014','DD-MM-YYYY'), TO_DATE('14:03:40','hh24:mi:ss'), '000-0000-1234-204',
        (select IRD_NUMBER from (select * from employee order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2),
        (select customer_id from (select * from customer order by DBMS_RANDOM.RANDOM) WHERE ROWNUM < 2));
-
+*/
 
 
 CREATE TABLE book_tran
@@ -252,6 +254,7 @@ CREATE TABLE book_tran
 ttransaction_number CHAR (18)  REFERENCES transactions(transaction_number),
 CONSTRAINT book_tran_pk PRIMARY KEY(bisbn, ttransaction_number));
 
+/**
 INSERT INTO book_tran VALUES(
 	(select isbn from (select * from book order by dbms_random.random) where rownum < 2),
 	(select TRANSACTION_NUMBER from (select TRANSACTION_NUMBER, rownum as rn from transactions order by dbms_random.random) where rn=1)
@@ -284,13 +287,7 @@ INSERT INTO book_tran VALUES(
 	(select isbn from (select * from book order by dbms_random.random) where rownum < 2),
 	(select TRANSACTION_NUMBER from (select TRANSACTION_NUMBER, rownum as rn from transactions order by dbms_random.random) where rn=8)
 );
-/**
-INSERT INTO book_tran VALUES
-('326-1-234923-21-2', '000-0000-1434-455');
-INSERT INTO book_tran VALUES
-('321-1-234333-21-8', '000-0000-1234-125');
 */
-
 
 
 
